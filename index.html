@@ -1,7 +1,4 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MP Police Rank Predictor</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MP Police Rank Predictor</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 :root{color-scheme:light;--bg:#f4f6fb;--panel:#ffffff;--line:#d8deeb;--text:#17233b;--muted:#63708a;--blue:#173b70;--green:#b88924;--red:#b42318;--soft-green:#fff7e5;--deep-green:#10284f;--pale-blue:#edf2fb}
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(180deg,#edf2fb 0,#f7f8fc 360px,#f7f8fc 100%);font:16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
@@ -10,7 +7,6 @@ main{max-width:1120px;margin:28px auto;padding:0 16px}
 h1{font-size:clamp(2rem,5vw,3.2rem);margin:8px 0;color:#10284f;letter-spacing:-.035em}
 h2{color:#1b3156}
 p{color:var(--muted);line-height:1.55}
-.notice{padding:12px;border:1px solid #e7d5a5;background:#fff8e8;border-radius:12px;color:#765515;font-size:.9rem;margin:18px 0}
 .grid{display:grid;grid-template-columns:1fr 1.2fr;gap:16px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 5px 18px rgba(16,40,79,.06)}
 .sub{font-size:.88rem;margin-top:5px}
@@ -29,7 +25,7 @@ input::placeholder{color:#8994a7;opacity:1}
 .metric.asi{border-color:#c8d5ed;background:#edf2fb}
 .metric.hc{border-color:#ead9ad;background:#fff8e8}
 .metric small{display:block;color:var(--muted);font-size:.75rem;margin-top:4px}
-.metric strong{font-size:1.6rem;color:#10284f}
+.metric strong{font-size:1.9rem;color:#10284f;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.live-total{position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease}.live-total:has(strong:not(:empty)){box-shadow:0 8px 22px rgba(23,59,112,.10)}.live-total strong{display:block;min-height:2.25rem;animation:scoreIn .22s ease}.score-track{height:7px;border-radius:99px;background:#dbe4f3;overflow:hidden;margin-top:9px}.score-track span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#477bd0,#173b70);transition:width .35s ease}.metric.hc .score-track{background:#f0e4c5}.metric.hc .score-track span{background:linear-gradient(90deg,#edc96e,#b88924)}@keyframes scoreIn{from{opacity:.55;transform:translateY(3px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 .btn{padding:11px 14px;border:0;border-radius:9px;font-weight:800;cursor:pointer;transition:background .15s,transform .15s}
 .btn:hover{transform:translateY(-1px)}
 .primary{background:#173b70;color:#fff;width:100%;margin-top:16px}
@@ -52,7 +48,7 @@ body[data-theme="green"] .table-wrap thead th{background:#e4f2e8;color:#205b3e;b
 body[data-theme="graygreen"] .table-wrap thead th{background:#e3e9e5;color:#26332c;box-shadow:0 1px 0 #cbd5ce}
 body[data-theme="dark"] .table-wrap thead th{background:#17304d;color:#fff;box-shadow:0 1px 0 #29415f}
 table{border-collapse:collapse;width:100%;min-width:1050px;font-size:.85rem}
-th,td{text-align:left;padding:10px;border-bottom:1px solid #e6eaf2;white-space:nowrap}td{color:var(--text)}
+.roll-cell{cursor:pointer;user-select:text;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e6eaf2;white-space:nowrap}td{color:var(--text)}
 th{background:#173b70;color:#fff;font-weight:800}
 tbody tr:nth-child(even){background:#f7f8fc}
 tr:last-child td{border-bottom:0}
@@ -66,7 +62,7 @@ tr:last-child td{border-bottom:0}
 .table-summary{font-size:.82rem;color:var(--muted);margin:10px 0}
 .table-wrap th:nth-child(11),.table-wrap th:nth-child(12){color:#ffe4a3}
 .table-wrap tbody tr:hover{background:#fff3d5}
-@media(max-width:780px){.grid{grid-template-columns:1fr}.panel{padding:15px}.filter-bar{grid-template-columns:1fr}.export-wrap .btn{width:100%}}
+.grid>section:nth-child(2){position:sticky;top:16px;align-self:start;z-index:10}@media(max-width:780px){.grid{grid-template-columns:1fr}.grid>section:nth-child(2){position:static;top:auto;z-index:auto}.panel{padding:15px}.filter-bar{grid-template-columns:1fr}.export-wrap .btn{width:100%}}
 .theme-picker{position:relative;top:auto;right:auto;z-index:1;display:flex;margin:0 0 14px auto;width:max-content;align-items:center;gap:8px;padding:5px 8px;background:transparent;border:1px solid var(--line);border-radius:999px;box-shadow:none;color:var(--text);isolation:isolate;opacity:.88}.theme-picker label{margin:0;font-size:.75rem;font-weight:700;white-space:nowrap;color:var(--muted)}.theme-picker .theme-options{display:flex;align-items:center;gap:8px}.theme-dot{width:27px;height:27px;border-radius:50%;border:2px solid #c3ccc7;padding:3px;background:#fff;cursor:pointer;display:grid;place-items:center;box-shadow:0 1px 3px #0001}.theme-dot .swatch{display:block;width:100%;height:100%;border-radius:50%;background:var(--swatch);border:1px solid #0002}.theme-dot[aria-pressed="true"]{border:3px solid #26352f;box-shadow:0 0 0 2px #fff,0 0 0 4px #66766c}.theme-dot:focus-visible{outline:3px solid #26734d;outline-offset:3px}.theme-dot:hover{transform:scale(1.08)}.theme-dot::after{content:attr(title);position:absolute;top:calc(100% + 9px);right:0;white-space:nowrap;background:#26352f;color:#fff;font-size:12px;font-weight:600;padding:5px 8px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .12s}.theme-dot:hover::after,.theme-dot:focus-visible::after{opacity:1}
 body[data-theme="green"]{--bg:#f3f8f4;--panel:#fff;--line:#d5e5d8;--text:#183328;--muted:#62776b;--blue:#176b45;--green:#27935f;--red:#b42318;--soft-green:#e9f6ee;--deep-green:#104b32;--pale-blue:#edf7f0;background:linear-gradient(180deg,#eaf5ed 0,#f7faf7 360px,#f7faf7 100%)}
 body[data-theme="green"] h1,body[data-theme="green"] h2{color:var(--deep-green)}
@@ -120,102 +116,81 @@ body[data-theme="greennavytable"] tbody tr:nth-child(even),body[data-theme="gree
 body[data-theme="greennavytable"] tbody tr:hover,body[data-theme="greennavytable"] tbody tr:hover td{background:#183858;color:#fff}
 body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="greennavytable"] .table-wrap th:nth-child(12){color:#bfe8cc}
 @media(max-width:600px){.theme-picker{margin:8px 10px 0 auto;padding:5px 7px;gap:5px}.theme-picker label{display:none}.theme-picker .theme-options{gap:5px}.theme-dot{width:28px;height:28px}main{margin-top:12px}}
-</style></head><body data-theme="navy"><main>
-<div class="theme-picker" role="group" aria-label="Choose website theme"><label>Theme</label><div class="theme-options"><button class="theme-dot" type="button" data-theme-choice="navy" title="Navy Blue &amp; Gold" aria-label="Navy Blue and Gold theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#173b70 0 55%,#b88924 55% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="green" title="Clean White &amp; Green" aria-label="Clean White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="graygreen" title="Gray, White &amp; Green" aria-label="Gray, White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#d4dcd7 0 32%,#ffffff 32% 65%,#2f8b5d 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="dark" title="Dark Navy" aria-label="Dark Navy theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#071426 0 65%,#e2b84e 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="greennavytable" title="White &amp; Green + Navy Table" aria-label="Clean white and green theme with dark navy table" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 70%,#071426 70% 100%)"><span class="swatch"></span></button></div></div>
-<div class="eyebrow">MP Police • Candidate dashboard</div><h1>MP Police Rank Predictor</h1><p class="hero-copy">Check your estimated ASI and Head Constable scores and compare your position with records submitted by other candidates.</p>
-<div class="grid"><section class="panel"><div class="section-kicker">YOUR ENTRY</div><h2>Candidate marks</h2><p class="sub">Enter your marks below. To update this record later, use the same roll number and the same 4-digit PIN.</p>
-<form id="candidateForm"><label for="roll">Roll number</label><input id="roll" maxlength="50" required autocomplete="off" placeholder="Enter roll number"><label for="category">Category</label><select id="category" required><option value="">Select category</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select>
-<div class="marks"><div><label for="a">Common Marks</label><input id="a" type="number" min="50" max="90" step="1" required placeholder="Enter Common Paper marks" aria-describedby="aHelp"></div><div><label for="b">ASI Marks</label><input id="b" type="number" min="60" max="90" step="1" required placeholder="Enter ASI marks" aria-describedby="bHelp"></div><div><label for="c">HC Marks</label><input id="c" type="number" min="50" max="90" step="1" required placeholder="Enter HC marks" aria-describedby="cHelp"></div><div><label for="d">Phase 2</label><input id="d" type="number" min="50" max="100" step="1" required placeholder="Enter Phase 2 marks" aria-describedby="dHelp"></div></div>
-<label for="pin">Personal PIN (exactly 4 digits)</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" required autocomplete="new-password" placeholder="Enter a 4-digit PIN"><p class="pin-help"><b>Remember your PIN.</b> You will need the same PIN whenever you update marks for this roll number. The website cannot show you a forgotten PIN. Do not share it with anyone, and avoid an easy PIN such as 1234.</p><button id="saveBtn" class="btn primary" type="submit">Save / update my record</button></form><div id="formStatus" class="status" aria-live="polite"></div><div class="formula"><b>Calculation formula</b><br>ASI Phase 1 = Common Marks + ASI Marks<br>Head Constable Phase 1 = Common Marks + Head Constable Marks<br>ASI Final Total = Common + ASI + Phase 2<br>Head Constable Final Total = Common + HC + Phase 2</div></section>
-<section class="panel"><div class="section-kicker">YOUR RESULTS</div><h2>My estimated position</h2><p class="sub">Ranks are calculated from currently submitted records. Ties share the same rank.</p><div class="calc-group"><div class="calc-title">Phase 1 Total <small>Updates as you type</small></div><div class="cards"><div class="metric asi"><span>ASI Total (A + B)</span><strong id="myAsiP1">—</strong><small id="asiP1Breakdown">Enter your marks</small></div><div class="metric hc"><span>HC Total (A + C)</span><strong id="myHcP1">—</strong><small id="hcP1Breakdown">Enter your marks</small></div></div></div><div class="calc-group phase2"><div class="calc-title">Phase 2 Total <small>Phase 1 + Phase 2 marks</small></div><div class="cards"><div class="metric asi"><span>ASI Total (A + B + D)</span><strong id="myAsiTotal">—</strong><small id="asiTotalBreakdown">Enter your marks</small></div><div class="metric hc"><span>HC Total (A + C + D)</span><strong id="myHcTotal">—</strong><small id="hcTotalBreakdown">Enter your marks</small></div></div></div><div class="calc-group rank-group"><div class="calc-title">Estimated Ranks</div><div class="ranks"><div class="rank"><span>ASI overall rank</span><strong id="asiRank">—</strong></div><div class="rank"><span>ASI category rank</span><strong id="asiCatRank">—</strong></div><div class="rank"><span>HC overall rank</span><strong id="hcRank">—</strong></div><div class="rank"><span>HC category rank</span><strong id="hcCatRank">—</strong></div></div></div><div class="actions"><button id="refreshBtn" class="btn secondary" type="button">Refresh rankings</button></div><div id="rankStatus" class="status" aria-live="polite">Demo candidates and live records will load.</div></section></div>
-<section class="panel"><div class="section-kicker">LIVE COMPARISON</div><h2>Shared ranking list</h2><p class="sub">Compare all candidates together or view ranks within categories. Ranks are calculated from records currently submitted to this website.</p><div class="filter-bar"><div><label for="rankMode">Ranking view</label><select id="rankMode"><option value="overall">Overall ranking</option><option value="category">Category-wise ranking</option></select></div><div><label for="filterCategory">Category filter</label><select id="filterCategory"><option value="">All categories</option><option value="UR">UR</option><option value="EWS">EWS</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div><div class="export-wrap"><button id="exportBtn" class="btn secondary" type="button">Export CSV</button></div></div><div id="tableSummary" class="table-summary">Loading rankings…</div><div class="table-wrap"><table><thead><tr><th>Ranks</th><th>Roll number</th><th>Category</th><th>Common Marks</th><th>ASI Marks</th><th>HC Marks</th><th>Phase 2</th><th>ASI Phase 1 Total</th><th>HC Phase 1 Total</th><th>ASI Total</th><th>HC Total</th><th>ASI rank</th><th>HC rank</th></tr></thead><tbody id="candidateRows"><tr><td colspan="13">Loading local dummy records…</td></tr></tbody></table></div><p class="footer">Unofficial predictor only. It cannot confirm eligibility, cut-offs, physical-test status, vacancies or final merit. Accuracy depends on submitted data.</p></section>
+</style></head><body data-theme="navy"><main><div class="theme-picker" role="group" aria-label="Choose website theme"><label>Theme</label><div class="theme-options"><button class="theme-dot" type="button" data-theme-choice="navy" title="Navy Blue &amp; Gold" aria-label="Navy Blue and Gold theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#173b70 0 55%,#b88924 55% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="green" title="Clean White &amp; Green" aria-label="Clean White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="graygreen" title="Gray, White &amp; Green" aria-label="Gray, White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#d4dcd7 0 32%,#ffffff 32% 65%,#2f8b5d 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="dark" title="Dark Navy" aria-label="Dark Navy theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#071426 0 65%,#e2b84e 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="greennavytable" title="White &amp; Green + Navy Table" aria-label="Clean white and green theme with dark navy table" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 70%,#071426 70% 100%)"><span class="swatch"></span></button></div></div>
+
+<div class="eyebrow">MP Police • Candidate dashboard</div><h1>MP Police Rank Predictor</h1>
+<p class="hero-copy">Enter Common Paper marks and the separate ASI/HC exam details. ASI and HC qualification and rankings are independent.</p>
+
+<div class="grid">
+<section class="panel"><div class="section-kicker">YOUR ENTRY</div><h2>Candidate marks</h2><p class="sub">Use the same roll number and 4-digit PIN when updating a record.</p>
+<form id="candidateForm">
+<label for="roll">Roll number</label><input id="roll" type="text" inputmode="numeric" pattern="[0-9]+" maxlength="50" required placeholder="Enter roll number" autocomplete="off">
+<label for="category">Category</label><select id="category" required><option value="">Select category</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select>
+<div class="calc-group"><div class="calc-title">Common Paper <small>100 marks</small></div><label for="common">Common Paper marks</label><input id="common" type="number" min="0" max="100" required placeholder="Enter Common Paper marks"></div>
+<div class="calc-group"><div class="calc-title">Phase 1 — Technical exams <small>100 marks each</small></div>
+<label for="asiP1Appeared">Appeared for ASI technical exam?</label><select id="asiP1Appeared" required><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select><div id="asiP1Box" hidden><label for="asiP1">ASI technical marks</label><input id="asiP1" type="number" min="0" max="100" placeholder="Enter ASI Phase 1 marks"></div>
+<label for="hcP1Appeared">Appeared for HC technical exam?</label><select id="hcP1Appeared" required><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select><div id="hcP1Box" hidden><label for="hcP1">HC technical marks</label><input id="hcP1" type="number" min="0" max="100" placeholder="Enter HC Phase 1 marks"></div>
+</div>
+<div class="calc-group phase2"><div class="calc-title">Phase 2 — Practical exams <small>100 marks each</small></div>
+<label for="asiQ">Qualified for ASI Phase 2?</label><select id="asiQ" required><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+<div id="asiP2Box" hidden><label for="asiP2">ASI practical marks</label><input id="asiP2" type="number" min="0" max="100" placeholder="Enter ASI Phase 2 marks"></div>
+<label for="hcQ">Qualified for HC Phase 2?</label><select id="hcQ" required><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+<div id="hcP2Box" hidden><label for="hcP2">HC practical marks</label><input id="hcP2" type="number" min="0" max="100" placeholder="Enter HC Phase 2 marks"></div>
+</div>
+<label for="pin">Personal PIN (exactly 4 digits)</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" required autocomplete="new-password" placeholder="Enter a 4-digit PIN"><p class="pin-help"><b>Remember your PIN.</b> Use the same PIN to update this roll number. Do not share it.</p>
+<button id="saveBtn" class="btn primary" type="submit">Save / update my record</button></form><div id="formStatus" class="status" aria-live="polite"></div>
+<div class="formula"><b>Final score (out of 300)</b><br>ASI = Common + ASI Phase 1 + ASI Phase 2<br>HC = Common + HC Phase 1 + HC Phase 2<br>Ranks are separate. Candidates missing a relevant exam score are not given a final rank for that post.</div></section>
+<section class="panel"><div class="section-kicker">YOUR RESULTS</div><h2>My estimated position</h2><div class="calc-group"><div class="calc-title">ASI result</div><div class="cards"><div class="metric asi live-total"><span>⚡ Live ASI sum <b>/ 300</b></span><strong id="asiTotal">—</strong><small id="asiFormula">Start entering marks</small><div class="score-track"><span id="asiProgress"></span></div></div><div class="metric asi"><span>ASI status</span><strong id="asiStatus">—</strong><small id="asiRank">Rank —</small></div></div></div>
+<div class="calc-group phase2"><div class="calc-title">HC result</div><div class="cards"><div class="metric hc live-total"><span>⚡ Live HC sum <b>/ 300</b></span><strong id="hcTotal">—</strong><small id="hcFormula">Start entering marks</small><div class="score-track"><span id="hcProgress"></span></div></div><div class="metric hc"><span>HC status</span><strong id="hcStatus">—</strong><small id="hcRank">Rank —</small></div></div></div><button id="refreshBtn" class="btn secondary" type="button">Refresh rankings</button><div id="rankStatus" class="status" aria-live="polite">Loading records…</div></section></div>
+<section class="panel"><div class="section-kicker">LIVE COMPARISON</div><h2>Shared ranking list</h2><div class="filter-bar"><div><label for="post">Post</label><select id="post"><option value="asi">ASI</option><option value="hc">Head Constable</option></select></div><div><label for="rankMode">Ranking view</label><select id="rankMode"><option value="overall">Overall ranking</option><option value="category">Category-wise ranking</option></select></div><div><label for="cat">Category filter</label><select id="cat"><option value="">All categories</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select></div></div><button id="exportBtn" class="btn secondary" type="button">Export CSV</button><div id="summary" class="table-summary">Loading…</div><div class="table-wrap"><table><thead><tr><th>Rank</th><th>Roll number</th><th>Category</th><th>Common</th><th>ASI P1</th><th>HC P1</th><th>ASI practical</th><th>HC practical</th><th>ASI total</th><th>HC total</th><th>ASI status</th><th>HC status</th></tr></thead><tbody id="rows"><tr><td colspan="12">Loading records…</td></tr></tbody></table></div><p class="footer">Unofficial predictor only. It cannot confirm official cutoffs, vacancies, eligibility or final merit.</p></section>
 </main><script>
 const SUPABASE_URL="https://alfihqtlpgtgvoffwkks.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";
-const $=id=>document.getElementById(id);let client=null,rows=[];
-const TEST_MODE = false;
-const DUMMY_CANDIDATES = [
-  ['DUMMY001','UR',84,90,74,87],['DUMMY002','OBC',50,72,75,70],['DUMMY003','SC',90,80,64,80],['DUMMY004','ST',75,72,50,64],['DUMMY005','EWS',51,61,89,87],
-  ['DUMMY006','UR',90,61,57,79],['DUMMY007','OBC',76,62,56,69],['DUMMY008','SC',66,85,61,59],['DUMMY009','ST',59,63,53,57],['DUMMY010','EWS',53,83,66,60],
-  ['DUMMY011','UR',72,83,50,87],['DUMMY012','OBC',85,71,67,83],['DUMMY013','SC',56,64,56,69],['DUMMY014','ST',79,62,56,86],['DUMMY015','EWS',63,78,75,91],
-  ['DUMMY016','UR',56,85,74,77],['DUMMY017','OBC',63,80,50,60],['DUMMY018','SC',71,77,67,91],['DUMMY019','ST',89,79,51,54],['DUMMY020','EWS',66,76,65,97],
-  ['DUMMY021','UR',89,70,66,70],['DUMMY022','OBC',61,61,83,67],['DUMMY023','SC',66,62,83,73],['DUMMY024','ST',54,79,85,63],['DUMMY025','EWS',68,81,64,63]
-].map(([roll_number,category,a,b,c,d])=>({roll_number,category,a,b,c,d}));
-function status(id,msg,type=""){ $(id).textContent=msg;$(id).className="status "+type; }
-function configured(){return SUPABASE_URL.endsWith(".supabase.co")&&SUPABASE_ANON_KEY.length>30&&!SUPABASE_ANON_KEY.includes("PASTE_YOUR");}
-function n(v){let x=Number(v);return v!==""&&v!=null&&Number.isFinite(x)?x:0;}
-function clean(r){return {...r,roll_number:String(r.roll_number??""),category:String(r.category??""),a:n(r.a),b:n(r.b),c:n(r.c),d:n(r.d),asi_phase1:n(r.asi_phase1??n(r.a)+n(r.b)),hc_phase1:n(r.hc_phase1??n(r.a)+n(r.c)),asi_total:n(r.asi_total??n(r.a)+n(r.b)+n(r.d)),hc_total:n(r.hc_total??n(r.a)+n(r.c)+n(r.d))};}
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function rank(t,f,cat=false){if(!t)return null;return 1+rows.filter(x=>(!cat||x.category===t.category)&&x[f]>t[f]).length;}
-function showRank(id,r,total){$(id).textContent=r==null?"—":`${r} / ${total}`;}
-function validMarks(){return ["a","b","c","d"].every(id=>$(id).value.trim()!==""&&$(id).checkValidity());}
-function updateLiveCalculation(){
- const ids=["a","b","c","d"], vals=ids.map(id=>$(id).value.trim());
- const [a,b,c,d]=vals.map(v=>v===""?null:Number(v));
- const complete=vals.every(v=>v!=="")&&["a","b","c","d"].every(id=>$(id).checkValidity());
- const p1a=a!==null&&b!==null, p1h=a!==null&&c!==null;
- $("myAsiP1").textContent=p1a?a+b:"—";$("myHcP1").textContent=p1h?a+c:"—";
- $("myAsiTotal").textContent=complete?a+b+d:"—";$("myHcTotal").textContent=complete?a+c+d:"—";
- $("asiP1Breakdown").textContent=p1a?`${a} + ${b}`:"Enter common and ASI marks";
- $("hcP1Breakdown").textContent=p1h?`${a} + ${c}`:"Enter common and HC marks";
- $("asiTotalBreakdown").textContent=complete?`${a} + ${b} + ${d}`:"Enter all four marks";
- $("hcTotalBreakdown").textContent=complete?`${a} + ${c} + ${d}`:"Enter all four marks";
- if(!complete){["asiRank","asiCatRank","hcRank","hcCatRank"].forEach(id=>$(id).textContent="—");}
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";const $=id=>document.getElementById(id);let client=null,records=[];
+const demo=[
+{roll_number:"900001",category:"UR",common:84,asi_p1:90,hc_p1:74,asi_p2:87,hc_p2:80,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:true,hc_p2_qualified:true,asi_p2_appeared:true,hc_p2_appeared:true},
+{roll_number:"900002",category:"OBC",common:70,asi_p1:72,hc_p1:75,asi_p2:null,hc_p2:70,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:false,hc_p2_qualified:true,asi_p2_appeared:false,hc_p2_appeared:true},
+{roll_number:"900003",category:"SC",common:90,asi_p1:80,hc_p1:64,asi_p2:null,hc_p2:80,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:false,hc_p2_qualified:true,asi_p2_appeared:false,hc_p2_appeared:true},
+{roll_number:"900004",category:"ST",common:75,asi_p1:72,hc_p1:null,asi_p2:64,hc_p2:null,asi_p1_appeared:true,hc_p1_appeared:false,asi_p2_qualified:true,hc_p2_qualified:false,asi_p2_appeared:true,hc_p2_appeared:false}];
+const val=id=>$(id).value===""?null:Number($(id).value), yes=id=>$(id).value==="yes";
+function clean(r){let c={...r,roll_number:String(r.roll_number||""),category:String(r.category||""),common:r.common??r.common_marks??r.a??null,asi_p1:r.asi_p1??r.asi_phase1_marks??r.b??null,hc_p1:r.hc_p1??r.hc_phase1_marks??r.c??null,asi_p2:r.asi_p2??r.asi_phase2_marks??r.d??null,hc_p2:r.hc_p2??r.hc_phase2_marks??null};for(let k of ["common","asi_p1","hc_p1","asi_p2","hc_p2"])c[k]=c[k]===""||c[k]==null?null:Number(c[k]);for(let k of ["asi_p1_appeared","hc_p1_appeared","asi_p2_qualified","hc_p2_qualified","asi_p2_appeared","hc_p2_appeared"])c[k]=[true,1,"true","yes"].includes(r[k]??r[k.replace("_p1","_phase1").replace("_p2","_phase2")]);c.asi_total=c.common!==null&&c.asi_p1!==null&&c.asi_p2!==null&&c.asi_p1_appeared&&c.asi_p2_qualified&&c.asi_p2_appeared?c.common+c.asi_p1+c.asi_p2:null;c.hc_total=c.common!==null&&c.hc_p1!==null&&c.hc_p2!==null&&c.hc_p1_appeared&&c.hc_p2_qualified&&c.hc_p2_appeared?c.common+c.hc_p1+c.hc_p2:null;return c}
+const form=()=>clean({roll_number:$("roll").value,category:$("category").value,common:val("common"),asi_p1:val("asiP1"),hc_p1:val("hcP1"),asi_p2:val("asiP2"),hc_p2:val("hcP2"),asi_p1_appeared:yes("asiP1Appeared"),hc_p1_appeared:yes("hcP1Appeared"),asi_p2_qualified:yes("asiQ"),hc_p2_qualified:yes("hcQ"),asi_p2_appeared:$("asiQ").value==="yes" && val("asiP2")!==null,hc_p2_appeared:$("hcQ").value==="yes" && val("hcP2")!==null});
+function sync(){for(let [sel,box,mark] of [["asiP1Appeared","asiP1Box","asiP1"],["hcP1Appeared","hcP1Box","hcP1"]]){$(box).hidden=!yes(sel);$(mark).required=yes(sel);if(!yes(sel))$(mark).value=""}for(let p of ["asi","hc"]){let q=$(p+"Q").value==="yes";$(p+"P2Box").hidden=!q;$(p+"P2").required=q;if(!q)$(p+"P2").value=""}updateMine()}
+function rank(c,p,cat=false){if(c[p+"_total"]===null)return null;return 1+records.filter(x=>x[p+"_total"]!==null&&(!cat||x.category===c.category)&&x[p+"_total"]>c[p+"_total"]).length}
+function updateMine(){
+  const c=form();
+  for(const post of ["asi","hc"]){
+    const p1=c[post+"_p1"],p2=c[post+"_p2"];
+    const parts=[
+      ["Common",c.common],
+      [post==="asi"?"ASI P1":"HC P1",p1],
+      [post==="asi"?"ASI practical":"HC practical",p2]
+    ].filter(([,value])=>value!==null&&Number.isFinite(value));
+    const liveTotal=parts.length?parts.reduce((sum,[,value])=>sum+value,0):null;
+    // The live sum updates for every entered mark, even when other fields are still empty.
+    // It is a running estimate only; final eligibility/ranking remains separate.
+    $(post+"Total").textContent=liveTotal===null?"—":`${liveTotal}`;
+    $(post+"Formula").textContent=liveTotal!==null
+      ? `${parts.map(([label,value])=>`${label} ${value}`).join(" + ")} = ${liveTotal} / 300`
+      : "Start entering marks to see your live sum";
+    $(post+"Progress").style.width=`${Math.max(0,Math.min(100,(liveTotal||0)/300*100))}%`;
+    let status=c[post+"_p2_qualified"]?"Qualified for Phase 2":
+      $(post+"Q").value==="no"?"Not qualified for Phase 2":
+      "Select Yes or No for Phase 2";
+    if(c[post+"_p2_qualified"]&&!c[post+"_p2_appeared"])status="Qualified, practical marks not entered";
+    if(liveTotal!==null&&c[post+"_total"]!==null)status="Final score available";
+    else if(liveTotal!==null&&c[post+"_total"]===null)status="Live sum shown; final score/rank not confirmed";
+    $(post+"Status").textContent=status;
+    const t=records.find(x=>x.roll_number.toLowerCase()===$("roll").value.trim().toLowerCase());
+    const r=t?rank(t,post):null;
+    $(post+"Rank").textContent=r!==null?`Overall rank ${r} / ${records.filter(x=>x[post+"_total"]!==null).length}`:"Rank —";
+  }
 }
-function rankFor(candidate, field, mode){return rank(candidate,field,mode==="category");}
-function render(){
- const body=$("candidateRows"), mode=$("rankMode").value, category=$("filterCategory").value;
- let list=rows.filter(c=>!category||c.category===category);
- list.sort((x,y)=>{if(mode==="category"&&x.category!==y.category)return x.category.localeCompare(y.category);return rankFor(x,"asi_total",mode)-rankFor(y,"asi_total",mode)||rankFor(x,"hc_total",mode)-rankFor(y,"hc_total",mode)||x.roll_number.localeCompare(y.roll_number);});
- $("tableSummary").textContent=`Showing ${list.length} of ${rows.length} candidates · ${mode==="category"?"Ranks compared within each category":"Ranks compared across all categories"}${category?` · Category: ${category}`:""}`;
- if(!list.length){body.innerHTML='<tr><td colspan="13">No candidate records match this filter yet.</td></tr>';return;}
- body.innerHTML=list.map((c,i)=>`<tr><td><strong>#${i+1}</strong></td><td>${esc(c.roll_number)}</td><td>${esc(c.category)}</td><td>${c.a}</td><td>${c.b}</td><td>${c.c}</td><td>${c.d}</td><td>${c.asi_phase1}</td><td>${c.hc_phase1}</td><td>${c.asi_total}</td><td>${c.hc_total}</td><td>${rankFor(c,"asi_total",mode)}</td><td>${rankFor(c,"hc_total",mode)}</td></tr>`).join("");
-}
-function display(roll){
- updateLiveCalculation();
- let t=rows.find(x=>x.roll_number.toLowerCase()===roll.trim().toLowerCase());
- const complete=validMarks();
- if(!t){["asiRank","asiCatRank","hcRank","hcCatRank"].forEach(id=>$(id).textContent="—");return;}
- if(!complete){["asiRank","asiCatRank","hcRank","hcCatRank"].forEach(id=>$(id).textContent="—");return;}
- $("myAsiP1").textContent=t.asi_phase1;$("myHcP1").textContent=t.hc_phase1;$("myAsiTotal").textContent=t.asi_total;$("myHcTotal").textContent=t.hc_total;
- showRank("asiRank",rank(t,"asi_total"),rows.length);showRank("asiCatRank",rank(t,"asi_total",true),rows.filter(x=>x.category===t.category).length);showRank("hcRank",rank(t,"hc_total"),rows.length);showRank("hcCatRank",rank(t,"hc_total",true),rows.filter(x=>x.category===t.category).length);
-}
-async function load(){
- const demoRows=DUMMY_CANDIDATES.map(clean);
- if(TEST_MODE){rows=demoRows;render();display($("roll").value);status("rankStatus",`${rows.length} dummy record(s) loaded locally. No live database connection is used.`,"ok");return;}
- if(!configured()){rows=demoRows;render();display($("roll").value);status("rankStatus","Showing the 25 demo candidates. Live records are not connected yet.","");return;}
- if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
- status("rankStatus","Loading demo and live candidate records…");
- let {data,error}=await client.rpc("get_public_candidates");
- if(error){rows=demoRows;render();display($("roll").value);status("rankStatus","Showing the 25 demo candidates. Live records are temporarily unavailable; try Refresh rankings again later.","");return;}
- const liveRows=(data||[]).map(clean), demoRolls=new Set(demoRows.map(x=>x.roll_number.toLowerCase()));
- rows=[...demoRows,...liveRows.filter(x=>!demoRolls.has(x.roll_number.toLowerCase()))];
- render();display($("roll").value);
- status("rankStatus",`${demoRows.length} unchanged demo candidates + ${liveRows.length} live record(s) loaded. Demo records are for testing only.`,"ok");
-}
-$("candidateForm").addEventListener("submit",async e=>{
- e.preventDefault();
- if(!validMarks()){status("formStatus","Please enter valid marks in all four fields before saving.","error");return;}
- if(TEST_MODE){status("formStatus","Test mode: saving is disabled. Dummy records are for viewing and ranking tests only.","error");return;}
- if(!configured()){status("formStatus","Supabase configuration is missing. Check the public project key.","error");return;}
- let pin=$("pin").value;
- if(!/^[0-9]{4}$/.test(pin)){status("formStatus","PIN must contain exactly 4 digits.","error");return;}
- if(/^DUMMY\d+$/i.test($("roll").value.trim())){status("formStatus","Roll numbers beginning with DUMMY are reserved for the demo records. Please use your real roll number.","error");return;}
- if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
- let btn=$("saveBtn"),roll=$("roll").value.trim();btn.disabled=true;status("formStatus","Saving…");
- try{let {data,error}=await client.rpc("save_public_candidate",{p_roll_number:roll,p_category:$("category").value,p_a:n($("a").value),p_b:n($("b").value),p_c:n($("c").value),p_d:n($("d").value),p_pin:pin});if(error)throw error;$("pin").value="";status("formStatus",String(data||"Saved."),"ok");await load();display(roll);}
- catch(err){status("formStatus",err.message||"Could not save record.","error");}
- finally{btn.disabled=false;}
-});
-$("refreshBtn").addEventListener("click",load);
-["a","b","c","d"].forEach(id=>$(id).addEventListener("input",()=>{updateLiveCalculation();}));
-$("roll").addEventListener("change",()=>display($("roll").value));
-$("rankMode").addEventListener("change",render);$("filterCategory").addEventListener("change",render);
-$("exportBtn").addEventListener("click",()=>{if(!rows.length){status("rankStatus","No records to export.");return;}let mode=$("rankMode").value,category=$("filterCategory").value;let filtered=rows.filter(r=>!category||r.category===category);filtered.sort((x,y)=>{if(mode==="category"&&x.category!==y.category)return x.category.localeCompare(y.category);return rankFor(x,"asi_total",mode)-rankFor(y,"asi_total",mode)||rankFor(x,"hc_total",mode)-rankFor(y,"hc_total",mode)||x.roll_number.localeCompare(y.roll_number);});let keys=["Ranks","Roll number","Category","Common Marks","ASI Marks","HC Marks","Phase 2","ASI Phase 1 Total","HC Phase 1 Total","ASI Total","HC Total","ASI rank","HC rank"];let q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';let csv=[keys.join(","),...filtered.map((r,i)=>["#"+(i+1),r.roll_number,r.category,r.a,r.b,r.c,r.d,r.asi_phase1,r.hc_phase1,r.asi_total,r.hc_total,rankFor(r,"asi_total",mode),rankFor(r,"hc_total",mode)].map(q).join(","))].join("\r\n");let url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}));let a=document.createElement("a");a.href=url;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(url);});
-if(TEST_MODE){$("saveBtn").disabled=true;$("saveBtn").textContent="Saving disabled in test mode";$("pin").disabled=true;}else{$("saveBtn").disabled=false;$("saveBtn").textContent="Save / update my record";$("pin").disabled=false;}
-const themeButtons=[...document.querySelectorAll("[data-theme-choice]")];
-function applyTheme(theme){const allowed=["navy","green","graygreen","dark","greennavytable"];const chosen=allowed.includes(theme)?theme:"graygreen";document.body.dataset.theme=chosen;themeButtons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.themeChoice===chosen)));try{localStorage.setItem("mpPolicePredictorTheme",chosen)}catch(e){}}
-let savedTheme="graygreen";try{savedTheme=localStorage.getItem("mpPolicePredictorTheme")||"graygreen"}catch(e){}
-themeButtons.forEach(button=>button.addEventListener("click",()=>applyTheme(button.dataset.themeChoice)));
-applyTheme(savedTheme);updateLiveCalculation();load();
+function render(){let p=$("post").value,mode=$("rankMode").value,cat=$("cat").value,list=records.filter(c=>(!cat||c.category===cat)&&c[p+"_total"]!==null);list.sort((a,b)=>mode==="category"?(a.category.localeCompare(b.category)||b[p+"_total"]-a[p+"_total"]):b[p+"_total"]-a[p+"_total"]);$("summary").textContent=`${list.length} ranked ${p.toUpperCase()} candidates · ${mode==="category"?"category-wise":"overall"}`;let esc=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));$("rows").innerHTML=list.length?list.map((c,i)=>`<tr><td>${i+1}</td><td class="roll-cell">${esc(c.roll_number)}</td><td>${esc(c.category)}</td><td>${c.common??"—"}</td><td>${c.asi_p1??"—"}</td><td>${c.hc_p1??"—"}</td><td>${c.asi_p2??"—"}</td><td>${c.hc_p2??"—"}</td><td>${c.asi_total??"—"}</td><td>${c.hc_total??"—"}</td><td>${c.asi_total===null?"Not ranked":"Ranked"}</td><td>${c.hc_total===null?"Not ranked":"Ranked"}</td></tr>`).join(""):'<tr><td colspan="12">No eligible ranked candidates found.</td></tr>'}
+async function load(){if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);let {data,error}=await client.rpc("get_public_candidates");if(error){records=demo.map(clean);$("rankStatus").textContent="Live records unavailable; showing illustrative demo records. "+error.message}else{records=[...demo.map(clean),...(data||[]).map(clean).filter(x=>!demo.some(d=>d.roll_number.toLowerCase()===x.roll_number.toLowerCase()))];$("rankStatus").textContent=`${demo.length} demo + ${(data||[]).length} live records loaded.`}render();updateMine()}
+$("candidateForm").addEventListener("submit",async e=>{e.preventDefault();sync();let c=form();if(!/^[0-9]{4}$/.test($("pin").value))return $("formStatus").textContent="PIN must be exactly 4 digits.";if((c.asi_p1_appeared&&c.asi_p1===null)||(c.hc_p1_appeared&&c.hc_p1===null)||(c.asi_p2_qualified&&c.asi_p2_appeared&&c.asi_p2===null)||(c.hc_p2_qualified&&c.hc_p2_appeared&&c.hc_p2===null))return $("formStatus").textContent="Enter marks for each exam the candidate appeared for.";if(!/^[0-9]+$/.test(c.roll_number.trim()))return $("formStatus").textContent="Roll number must contain digits only.";let b=$("saveBtn");b.disabled=true;$("formStatus").textContent="Saving…";try{let {data,error}=await client.rpc("save_public_candidate_v2",{p_roll_number:c.roll_number.trim(),p_category:c.category,p_common:c.common,p_asi_p1:c.asi_p1,p_hc_p1:c.hc_p1,p_asi_p2:c.asi_p2,p_hc_p2:c.hc_p2,p_asi_p1_appeared:c.asi_p1_appeared,p_hc_p1_appeared:c.hc_p1_appeared,p_asi_p2_qualified:c.asi_p2_qualified,p_hc_p2_qualified:c.hc_p2_qualified,p_asi_p2_appeared:c.asi_p2_appeared,p_hc_p2_appeared:c.hc_p2_appeared,p_pin:$("pin").value});if(error)throw error;$("pin").value="";$("formStatus").textContent=String(data||"Saved.");await load()}catch(err){$("formStatus").textContent="Save failed: Supabase needs the new save_public_candidate_v2 function and columns. "+err.message}finally{b.disabled=false}});
+// Restore roll-number click interaction: select the clicked roll number in the entry form without opening a popup.
+$("rows").addEventListener("click",e=>{const cell=e.target.closest(".roll-cell");if(!cell)return;const roll=cell.textContent.trim();if(!/^[0-9]+$/.test(roll))return;$("roll").value=roll;updateMine();$("roll").focus();$("candidateForm").scrollIntoView({behavior:"smooth",block:"start"});});
+$("refreshBtn").onclick=load;$("roll").addEventListener("beforeinput",e=>{if(e.data&&/[^0-9]/.test(e.data)&&e.inputType.startsWith("insert"))e.preventDefault()});$("roll").addEventListener("input",()=>{const el=$("roll"),start=el.selectionStart,original=el.value,cleaned=original.replace(/[^0-9]/g,"");if(original!==cleaned){const digitsBefore=original.slice(0,start??original.length).replace(/[^0-9]/g,"").length;el.value=cleaned;try{el.setSelectionRange(digitsBefore,digitsBefore)}catch(e){}}updateMine()});["common","asiP1","hcP1","asiP2","hcP2"].forEach(id=>$(id).addEventListener("input",updateMine));["asiP1Appeared","hcP1Appeared","asiQ","hcQ"].forEach(id=>$(id).addEventListener("change",sync));["post","rankMode","cat"].forEach(id=>$(id).addEventListener("change",render));
+$("exportBtn").onclick=()=>{let p=$("post").value,cat=$("cat").value,list=records.filter(c=>(!cat||c.category===cat)&&c[p+"_total"]!==null).sort((a,b)=>b[p+"_total"]-a[p+"_total"]),keys=["Rank","Roll","Category","Common","ASI Phase 1","HC Phase 1","ASI practical","HC practical","ASI total","HC total"],q=v=>'"'+String(v??"").replace(/"/g,'""')+'"',csv=[keys.join(","),...list.map((c,i)=>[i+1,c.roll_number,c.category,c.common,c.asi_p1,c.hc_p1,c.asi_p2,c.hc_p2,c.asi_total,c.hc_total].map(q).join(","))].join("\r\n"),u=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(u)};
+const buttons=[...document.querySelectorAll("[data-theme-choice]")];function applyTheme(t){let ok=["navy","green","graygreen","dark","greennavytable"];t=ok.includes(t)?t:"greennavytable";document.body.dataset.theme=t;buttons.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.themeChoice===t)));try{localStorage.setItem("mpPolicePredictorThemeV2",t)}catch(e){}}let theme="greennavytable";try{theme=localStorage.getItem("mpPolicePredictorThemeV2")||theme}catch(e){}buttons.forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(theme);sync();load();
 </script></body></html>
