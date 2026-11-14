@@ -146,13 +146,26 @@ body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="
 </main><script>
 const SUPABASE_URL="https://alfihqtlpgtgvoffwkks.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";const $=id=>document.getElementById(id);let client=null,records=[];
-const demo=[
-{roll_number:"900001",category:"UR",common:84,asi_p1:90,hc_p1:74,asi_p2:87,hc_p2:80,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:true,hc_p2_qualified:true,asi_p2_appeared:true,hc_p2_appeared:true},
-{roll_number:"900002",category:"OBC",common:70,asi_p1:72,hc_p1:75,asi_p2:null,hc_p2:70,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:false,hc_p2_qualified:true,asi_p2_appeared:false,hc_p2_appeared:true},
-{roll_number:"900003",category:"SC",common:90,asi_p1:80,hc_p1:64,asi_p2:null,hc_p2:80,asi_p1_appeared:true,hc_p1_appeared:true,asi_p2_qualified:false,hc_p2_qualified:true,asi_p2_appeared:false,hc_p2_appeared:true},
-{roll_number:"900004",category:"ST",common:75,asi_p1:72,hc_p1:null,asi_p2:64,hc_p2:null,asi_p1_appeared:true,hc_p1_appeared:false,asi_p2_qualified:true,hc_p2_qualified:false,asi_p2_appeared:true,hc_p2_appeared:false}];
 const val=id=>$(id).value===""?null:Number($(id).value), yes=id=>$(id).value==="yes";
-function clean(r){let c={...r,roll_number:String(r.roll_number||""),category:String(r.category||""),common:r.common??r.common_marks??r.a??null,asi_p1:r.asi_p1??r.asi_phase1_marks??r.b??null,hc_p1:r.hc_p1??r.hc_phase1_marks??r.c??null,asi_p2:r.asi_p2??r.asi_phase2_marks??r.d??null,hc_p2:r.hc_p2??r.hc_phase2_marks??null};for(let k of ["common","asi_p1","hc_p1","asi_p2","hc_p2"])c[k]=c[k]===""||c[k]==null?null:Number(c[k]);for(let k of ["asi_p1_appeared","hc_p1_appeared","asi_p2_qualified","hc_p2_qualified","asi_p2_appeared","hc_p2_appeared"])c[k]=[true,1,"true","yes"].includes(r[k]??r[k.replace("_p1","_phase1").replace("_p2","_phase2")]);c.asi_total=c.common!==null&&c.asi_p1!==null&&c.asi_p2!==null&&c.asi_p1_appeared&&c.asi_p2_qualified&&c.asi_p2_appeared?c.common+c.asi_p1+c.asi_p2:null;c.hc_total=c.common!==null&&c.hc_p1!==null&&c.hc_p2!==null&&c.hc_p1_appeared&&c.hc_p2_qualified&&c.hc_p2_appeared?c.common+c.hc_p1+c.hc_p2:null;return c}
+function clean(r){
+  const c={
+    ...r,
+    roll_number:String(r.roll_number||""),
+    category:String(r.category||""),
+    common:r.common_marks??r.common??r.a??null,
+    asi_p1:r.asi_phase1??r.asi_p1??r.b??null,
+    hc_p1:r.hc_phase1??r.hc_p1??r.c??null,
+    asi_p2:r.asi_phase2??r.asi_p2??r.d??null,
+    hc_p2:r.hc_phase2??r.hc_p2??null
+  };
+  for(const k of ["common","asi_p1","hc_p1","asi_p2","hc_p2"])
+    c[k]=c[k]===""||c[k]==null?null:Number(c[k]);
+  for(const k of ["asi_p1_appeared","asi_p2_appeared","asi_p2_qualified","hc_p1_appeared","hc_p2_appeared","hc_p2_qualified"])
+    c[k]=r[k]===true||r[k]===1||r[k]==="true";
+  c.asi_total=c.common!==null&&c.asi_p1!==null&&c.asi_p2!==null&&c.asi_p1_appeared&&c.asi_p2_appeared&&c.asi_p2_qualified?c.common+c.asi_p1+c.asi_p2:null;
+  c.hc_total=c.common!==null&&c.hc_p1!==null&&c.hc_p2!==null&&c.hc_p1_appeared&&c.hc_p2_appeared&&c.hc_p2_qualified?c.common+c.hc_p1+c.hc_p2:null;
+  return c;
+}
 const form=()=>clean({roll_number:$("roll").value,category:$("category").value,common:val("common"),asi_p1:val("asiP1"),hc_p1:val("hcP1"),asi_p2:val("asiP2"),hc_p2:val("hcP2"),asi_p1_appeared:yes("asiP1Appeared"),hc_p1_appeared:yes("hcP1Appeared"),asi_p2_qualified:yes("asiQ"),hc_p2_qualified:yes("hcQ"),asi_p2_appeared:$("asiQ").value==="yes" && val("asiP2")!==null,hc_p2_appeared:$("hcQ").value==="yes" && val("hcP2")!==null});
 function sync(){for(let [sel,box,mark] of [["asiP1Appeared","asiP1Box","asiP1"],["hcP1Appeared","hcP1Box","hcP1"]]){$(box).hidden=!yes(sel);$(mark).required=yes(sel);if(!yes(sel))$(mark).value=""}for(let p of ["asi","hc"]){let q=$(p+"Q").value==="yes";$(p+"P2Box").hidden=!q;$(p+"P2").required=q;if(!q)$(p+"P2").value=""}updateMine()}
 function rank(c,p,cat=false){if(c[p+"_total"]===null)return null;return 1+records.filter(x=>x[p+"_total"]!==null&&(!cat||x.category===c.category)&&x[p+"_total"]>c[p+"_total"]).length}
@@ -185,12 +198,57 @@ function updateMine(){
     $(post+"Rank").textContent=r!==null?`Overall rank ${r} / ${records.filter(x=>x[post+"_total"]!==null).length}`:"Rank —";
   }
 }
-function render(){let p=$("post").value,mode=$("rankMode").value,cat=$("cat").value,list=records.filter(c=>(!cat||c.category===cat)&&c[p+"_total"]!==null);list.sort((a,b)=>mode==="category"?(a.category.localeCompare(b.category)||b[p+"_total"]-a[p+"_total"]):b[p+"_total"]-a[p+"_total"]);$("summary").textContent=`${list.length} ranked ${p.toUpperCase()} candidates · ${mode==="category"?"category-wise":"overall"}`;let esc=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));$("rows").innerHTML=list.length?list.map((c,i)=>`<tr><td>${i+1}</td><td class="roll-cell">${esc(c.roll_number)}</td><td>${esc(c.category)}</td><td>${c.common??"—"}</td><td>${c.asi_p1??"—"}</td><td>${c.hc_p1??"—"}</td><td>${c.asi_p2??"—"}</td><td>${c.hc_p2??"—"}</td><td>${c.asi_total??"—"}</td><td>${c.hc_total??"—"}</td><td>${c.asi_total===null?"Not ranked":"Ranked"}</td><td>${c.hc_total===null?"Not ranked":"Ranked"}</td></tr>`).join(""):'<tr><td colspan="12">No eligible ranked candidates found.</td></tr>'}
-async function load(){if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);let {data,error}=await client.rpc("get_public_candidates");if(error){records=demo.map(clean);$("rankStatus").textContent="Live records unavailable; showing illustrative demo records. "+error.message}else{records=[...demo.map(clean),...(data||[]).map(clean).filter(x=>!demo.some(d=>d.roll_number.toLowerCase()===x.roll_number.toLowerCase()))];$("rankStatus").textContent=`${demo.length} demo + ${(data||[]).length} live records loaded.`}render();updateMine()}
+function render(){
+  const p=$("post").value,mode=$("rankMode").value,cat=$("cat").value;
+  const list=records.filter(c=>!cat||c.category===cat);
+  list.sort((a,b)=>{
+    if(mode==="category"){
+      const categoryOrder=a.category.localeCompare(b.category);
+      if(categoryOrder)return categoryOrder;
+    }
+    const aRanked=a[p+"_total"]!==null,bRanked=b[p+"_total"]!==null;
+    if(aRanked!==bRanked)return aRanked?-1:1;
+    if(aRanked&&bRanked)return b[p+"_total"]-a[p+"_total"];
+    return a.roll_number.localeCompare(b.roll_number);
+  });
+  const rankedCount=list.filter(c=>c[p+"_total"]!==null).length;
+  $("summary").textContent=`${rankedCount} ranked ${p.toUpperCase()} candidates · ${list.length} total candidates · ${mode==="category"?"category-wise":"overall"}`;
+  const esc=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  $("rows").innerHTML=list.length?list.map(c=>{
+    const r=c[p+"_total"]===null?"—":rank(c,p,mode==="category");
+    return `<tr><td>${r}</td><td class="roll-cell">${esc(c.roll_number)}</td><td>${esc(c.category)}</td><td>${c.common??"—"}</td><td>${c.asi_p1??"—"}</td><td>${c.hc_p1??"—"}</td><td>${c.asi_p2??"—"}</td><td>${c.hc_p2??"—"}</td><td>${c.asi_total??"—"}</td><td>${c.hc_total??"—"}</td><td>${c.asi_total===null?"Not ranked":"Ranked"}</td><td>${c.hc_total===null?"Not ranked":"Ranked"}</td></tr>`;
+  }).join(""):'<tr><td colspan="12">No candidate records found.</td></tr>';
+}
+async function load(){
+  if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  const {data,error}=await client.rpc("get_public_candidates_v2");
+  if(error){
+    records=[];
+    $("rankStatus").textContent="Could not load live records: "+error.message;
+  }else{
+    records=(data||[]).map(clean);
+    $("rankStatus").textContent=`${records.length} live candidate records loaded from Supabase.`;
+  }
+  render();
+  updateMine();
+}
 $("candidateForm").addEventListener("submit",async e=>{e.preventDefault();sync();let c=form();if(!/^[0-9]{4}$/.test($("pin").value))return $("formStatus").textContent="PIN must be exactly 4 digits.";if((c.asi_p1_appeared&&c.asi_p1===null)||(c.hc_p1_appeared&&c.hc_p1===null)||(c.asi_p2_qualified&&c.asi_p2_appeared&&c.asi_p2===null)||(c.hc_p2_qualified&&c.hc_p2_appeared&&c.hc_p2===null))return $("formStatus").textContent="Enter marks for each exam the candidate appeared for.";if(!/^[0-9]+$/.test(c.roll_number.trim()))return $("formStatus").textContent="Roll number must contain digits only.";let b=$("saveBtn");b.disabled=true;$("formStatus").textContent="Saving…";try{let {data,error}=await client.rpc("save_public_candidate_v2",{p_roll_number:c.roll_number.trim(),p_category:c.category,p_common:c.common,p_asi_p1:c.asi_p1,p_hc_p1:c.hc_p1,p_asi_p2:c.asi_p2,p_hc_p2:c.hc_p2,p_asi_p1_appeared:c.asi_p1_appeared,p_hc_p1_appeared:c.hc_p1_appeared,p_asi_p2_qualified:c.asi_p2_qualified,p_hc_p2_qualified:c.hc_p2_qualified,p_asi_p2_appeared:c.asi_p2_appeared,p_hc_p2_appeared:c.hc_p2_appeared,p_pin:$("pin").value});if(error)throw error;$("pin").value="";$("formStatus").textContent=String(data||"Saved.");await load()}catch(err){$("formStatus").textContent="Save failed: Supabase needs the new save_public_candidate_v2 function and columns. "+err.message}finally{b.disabled=false}});
 // Restore roll-number click interaction: select the clicked roll number in the entry form without opening a popup.
 $("rows").addEventListener("click",e=>{const cell=e.target.closest(".roll-cell");if(!cell)return;const roll=cell.textContent.trim();if(!/^[0-9]+$/.test(roll))return;$("roll").value=roll;updateMine();$("roll").focus();$("candidateForm").scrollIntoView({behavior:"smooth",block:"start"});});
 $("refreshBtn").onclick=load;$("roll").addEventListener("beforeinput",e=>{if(e.data&&/[^0-9]/.test(e.data)&&e.inputType.startsWith("insert"))e.preventDefault()});$("roll").addEventListener("input",()=>{const el=$("roll"),start=el.selectionStart,original=el.value,cleaned=original.replace(/[^0-9]/g,"");if(original!==cleaned){const digitsBefore=original.slice(0,start??original.length).replace(/[^0-9]/g,"").length;el.value=cleaned;try{el.setSelectionRange(digitsBefore,digitsBefore)}catch(e){}}updateMine()});["common","asiP1","hcP1","asiP2","hcP2"].forEach(id=>$(id).addEventListener("input",updateMine));["asiP1Appeared","hcP1Appeared","asiQ","hcQ"].forEach(id=>$(id).addEventListener("change",sync));["post","rankMode","cat"].forEach(id=>$(id).addEventListener("change",render));
-$("exportBtn").onclick=()=>{let p=$("post").value,cat=$("cat").value,list=records.filter(c=>(!cat||c.category===cat)&&c[p+"_total"]!==null).sort((a,b)=>b[p+"_total"]-a[p+"_total"]),keys=["Rank","Roll","Category","Common","ASI Phase 1","HC Phase 1","ASI practical","HC practical","ASI total","HC total"],q=v=>'"'+String(v??"").replace(/"/g,'""')+'"',csv=[keys.join(","),...list.map((c,i)=>[i+1,c.roll_number,c.category,c.common,c.asi_p1,c.hc_p1,c.asi_p2,c.hc_p2,c.asi_total,c.hc_total].map(q).join(","))].join("\r\n"),u=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(u)};
+$("exportBtn").onclick=()=>{
+  let p=$("post").value,cat=$("cat").value;
+  let list=records.filter(c=>!cat||c.category===cat).sort((a,b)=>{
+    const ar=a[p+"_total"]!==null,br=b[p+"_total"]!==null;
+    if(ar!==br)return ar?-1:1;
+    if(ar&&br)return b[p+"_total"]-a[p+"_total"];
+    return a.roll_number.localeCompare(b.roll_number);
+  });
+  let keys=["Rank","Roll","Category","Common","ASI Phase 1","HC Phase 1","ASI practical","HC practical","ASI total","HC total"],
+  q=v=>'"'+String(v??"").replace(/"/g,'""')+'"',
+  csv=[keys.join(","),...list.map(c=>[c[p+"_total"]===null?"—":rank(c,p,$("rankMode").value==="category"),c.roll_number,c.category,c.common,c.asi_p1,c.hc_p1,c.asi_p2,c.hc_p2,c.asi_total,c.hc_total].map(q).join(","))].join("\r\n"),
+  u=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");
+  a.href=u;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(u);
+};
 const buttons=[...document.querySelectorAll("[data-theme-choice]")];function applyTheme(t){let ok=["navy","green","graygreen","dark","greennavytable"];t=ok.includes(t)?t:"greennavytable";document.body.dataset.theme=t;buttons.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.themeChoice===t)));try{localStorage.setItem("mpPolicePredictorThemeV2",t)}catch(e){}}let theme="greennavytable";try{theme=localStorage.getItem("mpPolicePredictorThemeV2")||theme}catch(e){}buttons.forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(theme);sync();load();
 </script></body></html>
