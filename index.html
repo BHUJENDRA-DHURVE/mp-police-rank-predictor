@@ -145,7 +145,7 @@ body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="
 <section class="panel"><div class="section-kicker">LIVE COMPARISON</div><h2>Shared ranking list</h2><div class="filter-bar"><div><label for="post">Post</label><select id="post"><option value="asi">ASI</option><option value="hc">Head Constable</option></select></div><div><label for="rankMode">Ranking view</label><select id="rankMode"><option value="overall">Overall ranking</option><option value="category">Category-wise ranking</option></select></div><div><label for="cat">Category filter</label><select id="cat"><option value="">All categories</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select></div></div><button id="exportBtn" class="btn secondary" type="button">Export CSV</button><div id="summary" class="table-summary">Loading…</div><div class="table-wrap"><table><thead><tr><th>Rank</th><th>Roll number</th><th>Category</th><th>Common</th><th>ASI P1</th><th>HC P1</th><th>ASI practical</th><th>HC practical</th><th>ASI total</th><th>HC total</th><th>ASI status</th><th>HC status</th></tr></thead><tbody id="rows"><tr><td colspan="12">Loading records…</td></tr></tbody></table></div><p class="footer">Unofficial predictor only. It cannot confirm official cutoffs, vacancies, eligibility or final merit.</p></section>
 </main><script>
 const SUPABASE_URL="https://alfihqtlpgtgvoffwkks.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";const $=id=>document.getElementById(id);let client=null,records=[];
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";const $=id=>document.getElementById(id);let client=null,records=[],exceptionCategories=[];
 const val=id=>$(id).value===""?null:Number($(id).value), yes=id=>$(id).value==="yes";
 function clean(r){
   const c={
@@ -168,7 +168,8 @@ function clean(r){
 }
 const form=()=>clean({roll_number:$("roll").value,category:$("category").value,common:val("common"),asi_p1:val("asiP1"),hc_p1:val("hcP1"),asi_p2:val("asiP2"),hc_p2:val("hcP2"),asi_p1_appeared:yes("asiP1Appeared"),hc_p1_appeared:yes("hcP1Appeared"),asi_p2_qualified:yes("asiQ"),hc_p2_qualified:yes("hcQ"),asi_p2_appeared:$("asiQ").value==="yes" && val("asiP2")!==null,hc_p2_appeared:$("hcQ").value==="yes" && val("hcP2")!==null});
 function sync(){for(let [sel,box,mark] of [["asiP1Appeared","asiP1Box","asiP1"],["hcP1Appeared","hcP1Box","hcP1"]]){$(box).hidden=!yes(sel);$(mark).required=yes(sel);if(!yes(sel))$(mark).value=""}for(let p of ["asi","hc"]){let q=$(p+"Q").value==="yes";$(p+"P2Box").hidden=!q;$(p+"P2").required=q;if(!q)$(p+"P2").value=""}updateMine()}
-function rank(c,p,cat=false){if(c[p+"_total"]===null)return null;return 1+records.filter(x=>x[p+"_total"]!==null&&(!cat||x.category===c.category)&&x[p+"_total"]>c[p+"_total"]).length}
+function categoriesFor(c,p){const found=exceptionCategories.filter(x=>String(x.application_no||"").trim()===String(c.roll_number||"").trim()&&String(x.post||"").toUpperCase()===p.toUpperCase()).map(x=>String(x.allotted_category||"").trim()).filter(Boolean);return [...new Set(found.length?found:[c.category].filter(Boolean))]}
+function rank(c,p,categoryName=null){if(c[p+"_total"]===null)return null;return 1+records.filter(x=>x[p+"_total"]!==null&&(!categoryName||categoriesFor(x,p).includes(categoryName))&&x[p+"_total"]>c[p+"_total"]).length}
 function updateMine(){
   const c=form();
   for(const post of ["asi","hc"]){
@@ -200,10 +201,10 @@ function updateMine(){
 }
 function render(){
   const p=$("post").value,mode=$("rankMode").value,cat=$("cat").value;
-  const list=records.filter(c=>!cat||c.category===cat);
+  const list=records.filter(c=>!cat||categoriesFor(c,p).includes(cat));
   list.sort((a,b)=>{
     if(mode==="category"){
-      const categoryOrder=a.category.localeCompare(b.category);
+      const categoryOrder=(categoriesFor(a,p)[0]||"").localeCompare(categoriesFor(b,p)[0]||"");
       if(categoryOrder)return categoryOrder;
     }
     const aRanked=a[p+"_total"]!==null,bRanked=b[p+"_total"]!==null;
@@ -215,19 +216,21 @@ function render(){
   $("summary").textContent=`${rankedCount} ranked ${p.toUpperCase()} candidates · ${list.length} total candidates · ${mode==="category"?"category-wise":"overall"}`;
   const esc=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   $("rows").innerHTML=list.length?list.map(c=>{
-    const r=c[p+"_total"]===null?"—":rank(c,p,mode==="category");
-    return `<tr><td>${r}</td><td class="roll-cell">${esc(c.roll_number)}</td><td>${esc(c.category)}</td><td>${c.common??"—"}</td><td>${c.asi_p1??"—"}</td><td>${c.hc_p1??"—"}</td><td>${c.asi_p2??"—"}</td><td>${c.hc_p2??"—"}</td><td>${c.asi_total??"—"}</td><td>${c.hc_total??"—"}</td><td>${c.asi_total===null?"Not ranked":"Ranked"}</td><td>${c.hc_total===null?"Not ranked":"Ranked"}</td></tr>`;
+    const rankCategory=mode==="category"?(cat||categoriesFor(c,p)[0]||null):null;
+    const r=c[p+"_total"]===null?"—":rank(c,p,rankCategory);
+    return `<tr><td>${r}</td><td class="roll-cell">${esc(c.roll_number)}</td><td>${esc(categoriesFor(c,p).join(" / "))}</td><td>${c.common??"—"}</td><td>${c.asi_p1??"—"}</td><td>${c.hc_p1??"—"}</td><td>${c.asi_p2??"—"}</td><td>${c.hc_p2??"—"}</td><td>${c.asi_total??"—"}</td><td>${c.hc_total??"—"}</td><td>${c.asi_total===null?"Not ranked":"Ranked"}</td><td>${c.hc_total===null?"Not ranked":"Ranked"}</td></tr>`;
   }).join(""):'<tr><td colspan="12">No candidate records found.</td></tr>';
 }
 async function load(){
   if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-  const {data,error}=await client.rpc("get_public_candidates_v2");
-  if(error){
-    records=[];
-    $("rankStatus").textContent="Could not load live records: "+error.message;
+  const [{data,error},{data:categoryData,error:categoryError}]=await Promise.all([client.rpc("get_public_candidates_v2"),client.rpc("get_candidate_result_categories")]);
+  if(error||categoryError){
+    records=[];exceptionCategories=[];
+    $("rankStatus").textContent="Could not load live records: "+(error?.message||categoryError?.message||"Unknown error");
   }else{
     records=(data||[]).map(clean);
-    $("rankStatus").textContent=`${records.length} live candidate records loaded from Supabase.`;
+    exceptionCategories=categoryData||[];
+    $("rankStatus").textContent=`${records.length} live candidate records loaded. Exception categories: ${exceptionCategories.length}.`;
   }
   render();
   updateMine();
@@ -238,15 +241,15 @@ $("rows").addEventListener("click",e=>{const cell=e.target.closest(".roll-cell")
 $("refreshBtn").onclick=load;$("roll").addEventListener("beforeinput",e=>{if(e.data&&/[^0-9]/.test(e.data)&&e.inputType.startsWith("insert"))e.preventDefault()});$("roll").addEventListener("input",()=>{const el=$("roll"),start=el.selectionStart,original=el.value,cleaned=original.replace(/[^0-9]/g,"");if(original!==cleaned){const digitsBefore=original.slice(0,start??original.length).replace(/[^0-9]/g,"").length;el.value=cleaned;try{el.setSelectionRange(digitsBefore,digitsBefore)}catch(e){}}updateMine()});["common","asiP1","hcP1","asiP2","hcP2"].forEach(id=>$(id).addEventListener("input",updateMine));["asiP1Appeared","hcP1Appeared","asiQ","hcQ"].forEach(id=>$(id).addEventListener("change",sync));["post","rankMode","cat"].forEach(id=>$(id).addEventListener("change",render));
 $("exportBtn").onclick=()=>{
   let p=$("post").value,cat=$("cat").value;
-  let list=records.filter(c=>!cat||c.category===cat).sort((a,b)=>{
+  let list=records.filter(c=>!cat||categoriesFor(c,p).includes(cat)).sort((a,b)=>{
     const ar=a[p+"_total"]!==null,br=b[p+"_total"]!==null;
     if(ar!==br)return ar?-1:1;
     if(ar&&br)return b[p+"_total"]-a[p+"_total"];
     return a.roll_number.localeCompare(b.roll_number);
   });
-  let keys=["Rank","Roll","Category","Common","ASI Phase 1","HC Phase 1","ASI practical","HC practical","ASI total","HC total"],
+  let keys=["Rank","Roll","Category for selected post","Common","ASI Phase 1","HC Phase 1","ASI practical","HC practical","ASI total","HC total"],
   q=v=>'"'+String(v??"").replace(/"/g,'""')+'"',
-  csv=[keys.join(","),...list.map(c=>[c[p+"_total"]===null?"—":rank(c,p,$("rankMode").value==="category"),c.roll_number,c.category,c.common,c.asi_p1,c.hc_p1,c.asi_p2,c.hc_p2,c.asi_total,c.hc_total].map(q).join(","))].join("\r\n"),
+  csv=[keys.join(","),...list.map(c=>[c[p+"_total"]===null?"—":rank(c,p,$("rankMode").value==="category"?cat||categoriesFor(c,p)[0]||null:null),c.roll_number,categoriesFor(c,p).join(" / "),c.common,c.asi_p1,c.hc_p1,c.asi_p2,c.hc_p2,c.asi_total,c.hc_total].map(q).join(","))].join("\r\n"),
   u=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");
   a.href=u;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(u);
 };
