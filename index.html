@@ -155,7 +155,7 @@ body[data-theme="dark"] .chat-message.mine{background:var(--panel)}
 
 
 /* Compact chat access and responsive guidance */
-.chat-launch-row{position:sticky;top:8px;z-index:30;display:flex;justify-content:flex-end;align-items:center;gap:10px;margin:12px 0 16px;padding:4px 0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-radius:12px}
+.theme-picker{position:sticky;top:8px;z-index:100;display:flex;flex-wrap:nowrap;justify-content:flex-end;width:max-content;max-width:100%;margin:0 0 14px auto;background:var(--panel);backdrop-filter:blur(8px)}
 .chat-fab{position:relative;right:auto;bottom:auto;z-index:20;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:9px 16px;border:0;border-radius:10px;background:#173b70;color:#fff;font-size:.9rem;font-weight:800;box-shadow:0 2px 8px #10284f20;cursor:pointer}
 .chat-fab:hover{filter:brightness(1.08)}
 .chat-fab-icon{font-size:0;width:17px;height:17px;border:2px solid currentColor;border-radius:50%;display:inline-block;position:relative}
@@ -166,7 +166,7 @@ body[data-theme="dark"] .chat-message.mine{background:var(--panel)}
 .chat-info-icon{width:23px;height:23px;flex:0 0 23px;border-radius:50%;display:grid;place-items:center;background:#d8e7ff;color:#2457a7;font-size:0}
 .chat-info-icon:after{content:"";width:9px;height:9px;border-radius:50%;background:#2457a7}
 .chat-info-arrow{margin-left:auto;font-size:1.4rem;line-height:1}
-.chat-panel{top:112px;bottom:auto;right:20px;height:min(540px,calc(100vh - 135px))}
+.chat-panel{top:66px;bottom:auto;right:20px;height:min(540px,calc(100vh - 85px))}
 .desktop-tip{display:none}
 body[data-theme="green"] .chat-info,body[data-theme="greennavytable"] .chat-info{background:#effaf2;border-color:#c7e4d0;color:#176b45}
 body[data-theme="green"] .chat-info-icon,body[data-theme="greennavytable"] .chat-info-icon{background:#dff2e5;color:#176b45}
@@ -180,8 +180,8 @@ body[data-theme="dark"] .chat-info-icon:after{background:#dce9ff}
 @media(max-width:780px){
  .chat-launch-row{justify-content:stretch;gap:8px;margin:10px 0 12px}
  .chat-info{min-height:40px;padding:8px 10px;font-size:.78rem}
- .chat-fab{min-height:40px;padding:8px 12px;font-size:.82rem;flex:0 0 auto}
- .chat-panel{top:90px;right:8px;bottom:auto;width:calc(100vw - 16px);height:min(75vh,600px)}
+ .chat-fab{min-height:34px;padding:7px 10px;font-size:.78rem;flex:0 0 auto}
+ .chat-panel{top:58px;right:8px;bottom:auto;width:calc(100vw - 16px);height:min(75vh,600px)}
  .desktop-tip{display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:9px 10px;border:1px solid #ead9ad;border-radius:9px;background:#fff8e8;color:#69521f;font-size:.76rem;line-height:1.35}
  .desktop-tip[hidden]{display:none}
  .desktop-tip>span:first-child{font-size:1rem}
@@ -190,13 +190,12 @@ body[data-theme="dark"] .chat-info-icon:after{background:#dce9ff}
  body[data-theme="graygreen"] .desktop-tip{background:#eef5f0;border-color:#d4dcd7;color:#315542}
  body[data-theme="dark"] .desktop-tip{background:#172b43;border-color:#5a4a28;color:#e8d9ac}
 }
-@media(max-width:380px){.chat-info{font-size:.72rem;gap:7px}.chat-fab{padding:8px 10px}}
+@media(max-width:380px){.chat-fab{padding:6px 8px;font-size:.72rem}.theme-picker{gap:5px;padding:4px 6px}.theme-picker .theme-options{gap:4px}.theme-dot{width:23px;height:23px}}
 
-</style></head><body data-theme="navy"><main><div class="theme-picker" role="group" aria-label="Choose website theme"><label>Theme</label><div class="theme-options"><button class="theme-dot" type="button" data-theme-choice="navy" title="Navy Blue &amp; Gold" aria-label="Navy Blue and Gold theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#173b70 0 55%,#b88924 55% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="green" title="Clean White &amp; Green" aria-label="Clean White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="graygreen" title="Gray, White &amp; Green" aria-label="Gray, White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#d4dcd7 0 32%,#ffffff 32% 65%,#2f8b5d 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="dark" title="Dark Navy" aria-label="Dark Navy theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#071426 0 65%,#e2b84e 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="greennavytable" title="White &amp; Green + Navy Table" aria-label="Clean white and green theme with dark navy table" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 70%,#071426 70% 100%)"><span class="swatch"></span></button></div></div>
+</style></head><body data-theme="navy"><main><div class="theme-picker" role="group" aria-label="Choose website theme"><label>Theme</label><div class="theme-options"><button class="theme-dot" type="button" data-theme-choice="navy" title="Navy Blue &amp; Gold" aria-label="Navy Blue and Gold theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#173b70 0 55%,#b88924 55% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="green" title="Clean White &amp; Green" aria-label="Clean White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="graygreen" title="Gray, White &amp; Green" aria-label="Gray, White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#d4dcd7 0 32%,#ffffff 32% 65%,#2f8b5d 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="dark" title="Dark Navy" aria-label="Dark Navy theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#071426 0 65%,#e2b84e 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="greennavytable" title="White &amp; Green + Navy Table" aria-label="Clean white and green theme with dark navy table" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 70%,#071426 70% 100%)"><span class="swatch"></span></button></div><button id="chatFab" class="chat-fab" type="button" aria-label="Open public chat"><span class="chat-fab-icon" aria-hidden="true">●</span><span>Chat</span><span id="chatUnreadDot" class="chat-unread-dot" aria-label="New messages" hidden></span></button></div>
 
 <div class="eyebrow">MP Police • Candidate dashboard</div><h1>MP Police Rank Predictor</h1>
 <p class="hero-copy">Enter Common Paper marks and the separate ASI/HC exam details. ASI and HC qualification and rankings are independent.</p>
-<div class="chat-launch-row"><button id="chatInfo" class="chat-info" type="button"><span class="chat-info-icon" aria-hidden="true">●</span><span>Have a question? Join the discussion with other candidates.</span><span class="chat-info-arrow" aria-hidden="true">›</span></button></div>
 <div id="desktopTip" class="desktop-tip" hidden><span aria-hidden="true">▣</span><span>For the best experience, try viewing on a desktop or laptop.</span><button id="desktopTipClose" type="button" aria-label="Dismiss tip">×</button></div>
 
 <div class="grid">
@@ -223,7 +222,6 @@ body[data-theme="dark"] .chat-info-icon:after{background:#dce9ff}
 <section class="panel"><div class="section-kicker">LIVE COMPARISON</div><h2>Shared ranking list</h2><div class="filter-bar"><div><label for="post">Post</label><select id="post"><option value="asi">ASI</option><option value="hc">Head Constable</option></select></div><div><label for="rankMode">Ranking view</label><select id="rankMode"><option value="overall">Overall ranking</option><option value="category">Category-wise ranking</option></select></div><div><label for="cat">Category filter</label><select id="cat"><option value="">All categories</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select></div></div><button id="exportBtn" class="btn secondary" type="button">Export CSV</button><div id="summary" class="table-summary">Loading…</div><div class="table-wrap"><table><thead><tr><th>Rank</th><th>Roll number</th><th>Category</th><th>Common</th><th>ASI P1</th><th>HC P1</th><th>ASI practical</th><th>HC practical</th><th>ASI total</th><th>HC total</th><th>ASI status</th><th>HC status</th></tr></thead><tbody id="rows"><tr><td colspan="12">Loading records…</td></tr></tbody></table></div><p class="footer">Unofficial predictor only. It cannot confirm official cutoffs, vacancies, eligibility or final merit.</p></section>
 
 <!-- Public chat -->
-<button id="chatFab" class="chat-fab" type="button" aria-label="Open public chat"><span class="chat-fab-icon" aria-hidden="true">●</span><span>Chat</span><span id="chatUnreadDot" class="chat-unread-dot" aria-label="New messages" hidden></span></button>
 <aside id="chatPanel" class="chat-panel" aria-label="Public discussion" hidden>
   <header class="chat-header">
     <div><strong>Public discussion</strong><small id="chatIdentity">Connecting...</small></div>
@@ -388,7 +386,6 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
     }
   };
   el("chatFab").addEventListener("click", () => openChat(true));
-  el("chatInfo").addEventListener("click", () => openChat(true));
   el("chatClose").addEventListener("click", () => openChat(false));
 
   const tipKey = "mpPoliceDesktopTipDismissedV1";
