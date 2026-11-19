@@ -116,6 +116,34 @@ body[data-theme="greennavytable"] tbody tr:nth-child(even),body[data-theme="gree
 body[data-theme="greennavytable"] tbody tr:hover,body[data-theme="greennavytable"] tbody tr:hover td{background:#183858;color:#fff}
 body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="greennavytable"] .table-wrap th:nth-child(12){color:#bfe8cc}
 @media(max-width:600px){.theme-picker{margin:8px 10px 0 auto;padding:5px 7px;gap:5px}.theme-picker label{display:none}.theme-picker .theme-options{gap:5px}.theme-dot{width:28px;height:28px}main{margin-top:12px}}
+
+/* Public chat panel */
+.chat-fab{position:fixed;right:22px;bottom:22px;z-index:1000;border:0;border-radius:50px;padding:13px 20px;background:#173b70;color:#fff;font-weight:800;box-shadow:0 4px 16px #10284f33;cursor:pointer}
+.chat-panel{position:fixed;z-index:1001;right:20px;bottom:80px;width:min(370px,calc(100vw - 24px));height:min(540px,75vh);background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:15px;box-shadow:0 12px 40px #10284f30;display:flex;flex-direction:column;overflow:hidden}
+.chat-panel[hidden]{display:none}
+.chat-header{padding:13px 15px;background:#173b70;color:white;display:flex;align-items:center;justify-content:space-between}
+.chat-header strong,.chat-header small{display:block}
+.chat-header small{font-size:12px;opacity:.8;margin-top:3px}
+.chat-header button{border:0;background:transparent;color:white;font-size:25px;cursor:pointer}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.chat-empty{text-align:center;font-size:13px;color:var(--muted)}
+.chat-date{align-self:center;font-size:11px;color:var(--muted);background:var(--bg);padding:4px 10px;border-radius:20px}
+.chat-message{max-width:88%;align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:8px 10px;overflow-wrap:anywhere}
+.chat-message.mine{align-self:flex-end;background:var(--bg);border-color:var(--blue)}
+.chat-name{font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px}
+.chat-text{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.chat-time{font-size:10px;color:var(--muted);text-align:right;margin-top:5px}
+.chat-delete{border:0;background:transparent;color:#b42318;font-size:11px;cursor:pointer;padding:3px 0 0}
+.chat-notice{padding:0 12px;color:#b42318;font-size:12px;min-height:17px}
+.chat-form{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line)}
+.chat-form input{min-width:0;flex:1}
+.chat-form button{border:0;border-radius:8px;padding:0 14px;background:#173b70;color:white;font-weight:700;cursor:pointer}
+.chat-form button:disabled{opacity:.5;cursor:not-allowed}
+.chat-footnote{font-size:10px;text-align:center;margin:0;padding:0 8px 9px;color:var(--muted)}
+body[data-theme="green"] .chat-header,body[data-theme="green"] .chat-form button,body[data-theme="green"] .chat-fab,body[data-theme="graygreen"] .chat-header,body[data-theme="graygreen"] .chat-form button,body[data-theme="graygreen"] .chat-fab,body[data-theme="greennavytable"] .chat-header,body[data-theme="greennavytable"] .chat-form button,body[data-theme="greennavytable"] .chat-fab{background:#176b45}
+body[data-theme="dark"] .chat-message.mine{background:var(--panel)}
+@media(max-width:600px){.chat-fab{right:15px;bottom:15px}.chat-panel{right:8px;bottom:72px;width:calc(100vw - 16px);height:min(75vh,600px)}}
+
 </style></head><body data-theme="navy"><main><div class="theme-picker" role="group" aria-label="Choose website theme"><label>Theme</label><div class="theme-options"><button class="theme-dot" type="button" data-theme-choice="navy" title="Navy Blue &amp; Gold" aria-label="Navy Blue and Gold theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#173b70 0 55%,#b88924 55% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="green" title="Clean White &amp; Green" aria-label="Clean White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="graygreen" title="Gray, White &amp; Green" aria-label="Gray, White and Green theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#d4dcd7 0 32%,#ffffff 32% 65%,#2f8b5d 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="dark" title="Dark Navy" aria-label="Dark Navy theme" aria-pressed="false" style="--swatch:linear-gradient(135deg,#071426 0 65%,#e2b84e 65% 100%)"><span class="swatch"></span></button><button class="theme-dot" type="button" data-theme-choice="greennavytable" title="White &amp; Green + Navy Table" aria-label="Clean white and green theme with dark navy table" aria-pressed="false" style="--swatch:linear-gradient(135deg,#ffffff 0 48%,#176b45 48% 70%,#071426 70% 100%)"><span class="swatch"></span></button></div></div>
 
 <div class="eyebrow">MP Police • Candidate dashboard</div><h1>MP Police Rank Predictor</h1>
@@ -143,6 +171,23 @@ body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="
 <section class="panel"><div class="section-kicker">YOUR RESULTS</div><h2>My estimated position</h2><div class="calc-group"><div class="calc-title">ASI result</div><div class="cards"><div class="metric asi live-total"><span>⚡ Live ASI sum <b>/ 300</b></span><strong id="asiTotal">—</strong><small id="asiFormula">Start entering marks</small><div class="score-track"><span id="asiProgress"></span></div></div><div class="metric asi"><span>ASI status</span><strong id="asiStatus">—</strong><small id="asiRank">Rank —</small></div></div></div>
 <div class="calc-group phase2"><div class="calc-title">HC result</div><div class="cards"><div class="metric hc live-total"><span>⚡ Live HC sum <b>/ 300</b></span><strong id="hcTotal">—</strong><small id="hcFormula">Start entering marks</small><div class="score-track"><span id="hcProgress"></span></div></div><div class="metric hc"><span>HC status</span><strong id="hcStatus">—</strong><small id="hcRank">Rank —</small></div></div></div><button id="refreshBtn" class="btn secondary" type="button">Refresh rankings</button><div id="rankStatus" class="status" aria-live="polite">Loading records…</div></section></div>
 <section class="panel"><div class="section-kicker">LIVE COMPARISON</div><h2>Shared ranking list</h2><div class="filter-bar"><div><label for="post">Post</label><select id="post"><option value="asi">ASI</option><option value="hc">Head Constable</option></select></div><div><label for="rankMode">Ranking view</label><select id="rankMode"><option value="overall">Overall ranking</option><option value="category">Category-wise ranking</option></select></div><div><label for="cat">Category filter</label><select id="cat"><option value="">All categories</option><option>UR</option><option>EWS</option><option>OBC</option><option>SC</option><option>ST</option></select></div></div><button id="exportBtn" class="btn secondary" type="button">Export CSV</button><div id="summary" class="table-summary">Loading…</div><div class="table-wrap"><table><thead><tr><th>Rank</th><th>Roll number</th><th>Category</th><th>Common</th><th>ASI P1</th><th>HC P1</th><th>ASI practical</th><th>HC practical</th><th>ASI total</th><th>HC total</th><th>ASI status</th><th>HC status</th></tr></thead><tbody id="rows"><tr><td colspan="12">Loading records…</td></tr></tbody></table></div><p class="footer">Unofficial predictor only. It cannot confirm official cutoffs, vacancies, eligibility or final merit.</p></section>
+
+<!-- Public chat -->
+<button id="chatFab" class="chat-fab" type="button" aria-label="Open public chat">Chat</button>
+<aside id="chatPanel" class="chat-panel" aria-label="Public discussion" hidden>
+  <header class="chat-header">
+    <div><strong>Public discussion</strong><small id="chatIdentity">Connecting...</small></div>
+    <button id="chatClose" type="button" aria-label="Close chat">×</button>
+  </header>
+  <div id="chatMessages" class="chat-messages" aria-live="polite"><p class="chat-empty">Connecting to chat...</p></div>
+  <div id="chatNotice" class="chat-notice" aria-live="polite"></div>
+  <form id="chatForm" class="chat-form">
+    <input id="chatInput" type="text" maxlength="300" placeholder="Write a message..." autocomplete="off" aria-label="Write a chat message" required>
+    <button id="chatSend" type="submit">Send</button>
+  </form>
+  <p class="chat-footnote">Keep the discussion respectful. Maximum 300 characters.</p>
+</aside>
+
 </main><script>
 const SUPABASE_URL="https://alfihqtlpgtgvoffwkks.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZmlocXRscGd0Z3ZvZmZ3a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDkwMjAsImV4cCI6MjEwNzk4NTAyMH0.bs3qA2V2NF2MFFchlKAa-HVQWjj1oEa9IauEQcqMskE";const $=id=>document.getElementById(id);let client=null,records=[],exceptionCategories=[];
@@ -254,4 +299,195 @@ $("exportBtn").onclick=()=>{
   a.href=u;a.download="mp-police-rank-predictor.csv";a.click();URL.revokeObjectURL(u);
 };
 const buttons=[...document.querySelectorAll("[data-theme-choice]")];function applyTheme(t){let ok=["navy","green","graygreen","dark","greennavytable"];t=ok.includes(t)?t:"greennavytable";document.body.dataset.theme=t;buttons.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.themeChoice===t)));try{localStorage.setItem("mpPolicePredictorThemeV2",t)}catch(e){}}let theme="greennavytable";try{theme=localStorage.getItem("mpPolicePredictorThemeV2")||theme}catch(e){}buttons.forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(theme);sync();load();
+
+// ---------------- PUBLIC CHAT ----------------
+(() => {
+  const TOKEN_KEY = "mpPoliceChatTokenV1";
+  const NAME_KEY = "mpPoliceChatNameV1";
+  const OWN_KEY = "mpPoliceChatOwnIdsV1";
+  const API_URL = SUPABASE_URL + "/functions/v1/chat-api";
+  let visitorToken = "";
+  let visitorName = "";
+  let messages = [];
+  let channel = null;
+  let chatClient = null;
+  let ownIds = new Set();
+  try { ownIds = new Set(JSON.parse(localStorage.getItem(OWN_KEY) || "[]").map(Number)); } catch (_) {}
+
+  const el = id => document.getElementById(id);
+  const notice = value => { el("chatNotice").textContent = value || ""; };
+  const openChat = open => {
+    el("chatPanel").hidden = !open;
+    el("chatFab").hidden = open;
+    if (open) el("chatInput").focus();
+  };
+  el("chatFab").addEventListener("click", () => openChat(true));
+  el("chatClose").addEventListener("click", () => openChat(false));
+
+  async function api(body) {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify(body)
+    });
+    let result = {};
+    try { result = await response.json(); } catch (_) {}
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Chat request failed (" + response.status + ")");
+    }
+    return result;
+  }
+
+  async function register() {
+    const savedToken = localStorage.getItem(TOKEN_KEY);
+    const savedName = localStorage.getItem(NAME_KEY);
+    if (savedToken && /^[0-9a-f]{64}$/.test(savedToken) && savedName) {
+      visitorToken = savedToken;
+      visitorName = savedName;
+      return;
+    }
+    const result = await api({action:"register"});
+    if (!/^[0-9a-f]{64}$/.test(result.token || "") || !result.display_name) {
+      throw new Error("Invalid visitor registration response.");
+    }
+    visitorToken = result.token;
+    visitorName = result.display_name;
+    localStorage.setItem(TOKEN_KEY, visitorToken);
+    localStorage.setItem(NAME_KEY, visitorName);
+  }
+
+  function dateLabel(date) {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    const same = (a,b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    if (same(date,today)) return "Today";
+    if (same(date,yesterday)) return "Yesterday";
+    return date.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+  }
+
+  function render() {
+    const box = el("chatMessages");
+    const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 70;
+    box.replaceChildren();
+    if (!messages.length) {
+      const empty = document.createElement("p");
+      empty.className = "chat-empty";
+      empty.textContent = "No messages yet. Start the discussion!";
+      box.appendChild(empty);
+      return;
+    }
+    let lastDate = "";
+    for (const item of messages) {
+      const date = new Date(item.created_at);
+      const dateKey = date.toDateString();
+      if (dateKey !== lastDate) {
+        const separator = document.createElement("div");
+        separator.className = "chat-date";
+        separator.textContent = dateLabel(date);
+        box.appendChild(separator);
+        lastDate = dateKey;
+      }
+      const mine = ownIds.has(Number(item.id));
+      const bubble = document.createElement("div");
+      bubble.className = "chat-message" + (mine ? " mine" : "");
+      const name = document.createElement("div");
+      name.className = "chat-name";
+      name.textContent = item.display_name || "Visitor";
+      const content = document.createElement("div");
+      content.className = "chat-text";
+      content.textContent = item.message || "";
+      const time = document.createElement("div");
+      time.className = "chat-time";
+      time.textContent = date.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"});
+      bubble.append(name,content,time);
+      if (mine) {
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "chat-delete";
+        del.textContent = "Delete my message";
+        del.addEventListener("click", () => deleteMessage(item.id));
+        bubble.appendChild(del);
+      }
+      box.appendChild(bubble);
+    }
+    if (nearBottom) box.scrollTop = box.scrollHeight;
+  }
+
+  async function refresh() {
+    const {data,error} = await chatClient.rpc("get_chat_messages");
+    if (error) throw error;
+    messages = (data || []).sort((a,b) => new Date(a.created_at)-new Date(b.created_at)).slice(-50);
+    render();
+  }
+
+  async function deleteMessage(id) {
+    if (!confirm("Delete this message?")) return;
+    try {
+      await api({action:"delete",token:visitorToken,message_id:Number(id)});
+      ownIds.delete(Number(id));
+      localStorage.setItem(OWN_KEY,JSON.stringify([...ownIds]));
+      await refresh();
+      notice("Message deleted.");
+    } catch (error) { notice(error.message); }
+  }
+
+  el("chatForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const input = el("chatInput");
+    const button = el("chatSend");
+    const message = input.value.trim();
+    if (!message || message.length > 300) return;
+    button.disabled = true;
+    notice("");
+    try {
+      const result = await api({action:"post",token:visitorToken,message});
+      ownIds.add(Number(result.message_id));
+      localStorage.setItem(OWN_KEY,JSON.stringify([...ownIds]));
+      input.value = "";
+      await refresh();
+    } catch (error) { notice(error.message); }
+    finally { button.disabled = false; input.focus(); }
+  });
+
+  async function start() {
+    try {
+      chatClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+      await register();
+      el("chatIdentity").textContent = "You are " + visitorName;
+      await refresh();
+      channel = chatClient.channel("public-chat-live")
+        .on("postgres_changes",{event:"INSERT",schema:"public",table:"chat_public_messages"},payload => {
+          const row = payload.new;
+          if (!messages.some(item => Number(item.id)===Number(row.id))) {
+            messages.push(row);
+            messages.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+            messages = messages.slice(-50);
+            render();
+          }
+        })
+        .on("postgres_changes",{event:"DELETE",schema:"public",table:"chat_public_messages"},payload => {
+          const id = Number(payload.old.id);
+          messages = messages.filter(item=>Number(item.id)!==id);
+          ownIds.delete(id);
+          localStorage.setItem(OWN_KEY,JSON.stringify([...ownIds]));
+          render();
+        })
+        .subscribe(status => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+            notice("Live connection interrupted. Reopen the page to reconnect.");
+          }
+        });
+    } catch (error) {
+      el("chatIdentity").textContent = "Chat unavailable";
+      notice(error.message);
+    }
+  }
+  start();
+})();
+
 </script></body></html>
