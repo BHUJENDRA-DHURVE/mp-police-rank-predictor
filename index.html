@@ -133,8 +133,17 @@ body[data-theme="greennavytable"] .table-wrap th:nth-child(11),body[data-theme="
 .chat-name{font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px}
 .chat-text{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
 .chat-time{font-size:10px;color:var(--muted);text-align:right;margin-top:5px}
-.chat-delete{border:0;background:transparent;color:#b42318;font-size:11px;cursor:pointer;padding:3px 0 0}
-.chat-notice{padding:0 12px;color:#b42318;font-size:12px;min-height:17px}
+.chat-message{position:relative;padding-right:30px}
+.chat-menu-trigger{position:absolute;right:5px;top:4px;width:23px;height:25px;border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:19px;line-height:1;cursor:pointer}
+.chat-menu-trigger:hover{background:var(--line)}
+.chat-action-menu{position:absolute;z-index:5;right:7px;top:29px;min-width:145px;padding:5px;background:var(--panel);border:1px solid var(--line);border-radius:9px;box-shadow:0 5px 18px #0002}
+.chat-action-menu[hidden]{display:none}
+.chat-action-menu button{width:100%;border:0;border-radius:6px;background:transparent;color:var(--text);text-align:left;padding:9px 10px;font-size:12px;cursor:pointer}
+.chat-action-menu button:hover{background:var(--bg)}
+.chat-notice{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 10px;padding:6px 9px;border-radius:8px;background:var(--bg);color:var(--muted);font-size:12px;min-height:0}
+.chat-notice:empty{display:none}
+.chat-notice.error{color:#b42318;background:#fff1f0}
+.chat-notice button{border:0;background:transparent;color:inherit;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
 .chat-form{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line)}
 .chat-form input{min-width:0;flex:1}
 .chat-form button{border:0;border-radius:8px;padding:0 14px;background:#173b70;color:white;font-weight:700;cursor:pointer}
@@ -315,7 +324,20 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
   try { ownIds = new Set(JSON.parse(localStorage.getItem(OWN_KEY) || "[]").map(Number)); } catch (_) {}
 
   const el = id => document.getElementById(id);
-  const notice = value => { el("chatNotice").textContent = value || ""; };
+  const notice = (value, isError = false) => {
+    const box = el("chatNotice");
+    box.replaceChildren();
+    box.className = "chat-notice" + (isError ? " error" : "");
+    if (!value) return;
+    const message = document.createElement("span");
+    message.textContent = value;
+    const close = document.createElement("button");
+    close.type = "button";
+    close.setAttribute("aria-label","Dismiss message");
+    close.textContent = "×";
+    close.addEventListener("click", () => notice(""));
+    box.append(message,close);
+  };
   const openChat = open => {
     el("chatPanel").hidden = !open;
     el("chatFab").hidden = open;
@@ -406,17 +428,45 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
       time.textContent = date.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"});
       bubble.append(name,content,time);
       if (mine) {
-        const del = document.createElement("button");
-        del.type = "button";
-        del.className = "chat-delete";
-        del.textContent = "Delete my message";
-        del.addEventListener("click", () => deleteMessage(item.id));
-        bubble.appendChild(del);
+        const menuTrigger = document.createElement("button");
+        menuTrigger.type = "button";
+        menuTrigger.className = "chat-menu-trigger";
+        menuTrigger.textContent = "⋮";
+        menuTrigger.setAttribute("aria-label","Message options");
+        menuTrigger.setAttribute("aria-expanded","false");
+
+        const menu = document.createElement("div");
+        menu.className = "chat-action-menu";
+        menu.hidden = true;
+        const deleteOption = document.createElement("button");
+        deleteOption.type = "button";
+        deleteOption.textContent = "Delete message";
+        deleteOption.addEventListener("click", () => {
+          menu.hidden = true;
+          deleteMessage(item.id);
+        });
+        menu.appendChild(deleteOption);
+
+        menuTrigger.addEventListener("click", event => {
+          event.stopPropagation();
+          const shouldOpen = menu.hidden;
+          box.querySelectorAll(".chat-action-menu").forEach(other => { other.hidden = true; });
+          box.querySelectorAll(".chat-menu-trigger").forEach(other => other.setAttribute("aria-expanded","false"));
+          menu.hidden = !shouldOpen;
+          menuTrigger.setAttribute("aria-expanded",String(shouldOpen));
+        });
+        menu.addEventListener("click", event => event.stopPropagation());
+        bubble.append(menuTrigger,menu);
       }
       box.appendChild(bubble);
     }
     if (nearBottom) box.scrollTop = box.scrollHeight;
   }
+
+  document.addEventListener("click", () => {
+    el("chatMessages").querySelectorAll(".chat-action-menu").forEach(menu => { menu.hidden = true; });
+    el("chatMessages").querySelectorAll(".chat-menu-trigger").forEach(button => button.setAttribute("aria-expanded","false"));
+  });
 
   async function refresh() {
     const {data,error} = await chatClient.rpc("get_chat_messages");
@@ -433,7 +483,7 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
       localStorage.setItem(OWN_KEY,JSON.stringify([...ownIds]));
       await refresh();
       notice("Message deleted.");
-    } catch (error) { notice(error.message); }
+    } catch (error) { notice(error.message,true); }
   }
 
   el("chatForm").addEventListener("submit", async event => {
@@ -484,7 +534,7 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
         });
     } catch (error) {
       el("chatIdentity").textContent = "Chat unavailable";
-      notice(error.message);
+      notice(error.message,true);
     }
   }
   start();
