@@ -155,7 +155,7 @@ body[data-theme="dark"] .chat-message.mine{background:var(--panel)}
 
 
 /* Compact chat access and responsive guidance */
-.chat-launch-row{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin:12px 0 16px}
+.chat-launch-row{position:sticky;top:8px;z-index:30;display:flex;justify-content:flex-end;align-items:center;gap:10px;margin:12px 0 16px;padding:4px 0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-radius:12px}
 .chat-fab{position:relative;right:auto;bottom:auto;z-index:20;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:9px 16px;border:0;border-radius:10px;background:#173b70;color:#fff;font-size:.9rem;font-weight:800;box-shadow:0 2px 8px #10284f20;cursor:pointer}
 .chat-fab:hover{filter:brightness(1.08)}
 .chat-fab-icon{font-size:0;width:17px;height:17px;border:2px solid currentColor;border-radius:50%;display:inline-block;position:relative}
