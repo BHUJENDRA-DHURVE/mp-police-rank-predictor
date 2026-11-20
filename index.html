@@ -345,7 +345,7 @@ async function load(){
   }else{
     records=(data||[]).map(clean);
     exceptionCategories=categoryData||[];
-    $("rankStatus").textContent=`${records.length} live candidate records loaded. Exception categories: ${exceptionCategories.length}.`;
+    $("rankStatus").textContent=`${records.length} live candidate records loaded.`;
   }
   render();
   updateMine();
