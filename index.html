@@ -412,8 +412,10 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
 
   const tipKey = "mpPoliceDesktopTipDismissedV2";
   try {
-    if (localStorage.getItem(tipKey) === "1") el("desktopTip").hidden = true;
-  } catch (_) {}
+    el("desktopTip").hidden = localStorage.getItem(tipKey) === "1";
+  } catch (_) {
+    el("desktopTip").hidden = false;
+  }
   el("desktopTipClose").addEventListener("click", () => {
     el("desktopTip").hidden = true;
     try { localStorage.setItem(tipKey,"1"); } catch (_) {}
