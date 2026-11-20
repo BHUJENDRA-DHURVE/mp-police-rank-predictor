@@ -410,7 +410,7 @@ const buttons=[...document.querySelectorAll("[data-theme-choice]")];function app
   el("chatFab").addEventListener("click", () => openChat(true));
   el("chatClose").addEventListener("click", () => openChat(false));
 
-  const tipKey = "mpPoliceDesktopTipDismissedV1";
+  const tipKey = "mpPoliceDesktopTipDismissedV2";
   try {
     if (localStorage.getItem(tipKey) === "1") el("desktopTip").hidden = true;
   } catch (_) {}
